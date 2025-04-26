@@ -21,6 +21,8 @@ public class MineField {
 		return m;
 	}
 	
+	public Cells[][] getCell() {return this.cell;}
+
 	private void genMine(int m) {
 		int count = 0;
 		while(count < m) {
@@ -29,6 +31,7 @@ public class MineField {
 					[new java.util.Random().nextInt(cell[0].length) - 1];
 			if(!(target.getStatu() == MINE)) {
 				target.setStatu(MINE);
+				System.out.println(target);
 				count++;
 			}
 		}
