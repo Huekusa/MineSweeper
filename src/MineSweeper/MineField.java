@@ -7,13 +7,16 @@ public class MineField {
 	private int openCount;
 	private int height;
 	private int width;
-	private Cells[][] cell;
+	private Cell[][] cells;
 	
 	private MineField(int height, int width) {
-		
-		Cells.Create(height, width);
-		genCells(height, width);
+		mines = 40;
+		this.height = height;
+		this.width = width;
+		Cell.Create(this.height, this.width);
+		genCells(this.height, this.width);
 		genMine(mines);
+		cheakMine();
 	}
 	
 	public static MineField Create(int height, int width) {
@@ -21,17 +24,17 @@ public class MineField {
 		return m;
 	}
 	
-	public Cells[][] getCell() {return this.cell;}
+	public Cell[][] getCells() {return this.cells;}
 
 	private void genMine(int m) {
 		int count = 0;
 		while(count < m) {
-			var target = cell
-					[new java.util.Random().nextInt(cell.length) - 1]
-					[new java.util.Random().nextInt(cell[0].length) - 1];
+			var target = this.cells
+					[new java.util.Random().nextInt(this.height)]
+					[new java.util.Random().nextInt(this.width)];
 			if(!(target.getStatu() == MINE)) {
 				target.setStatu(MINE);
-				System.out.println(target);
+				System.out.println(target.getHeight() +" " +target.getWidth());
 				count++;
 			}
 		}
@@ -39,12 +42,26 @@ public class MineField {
 	}
 	
 	private void genCells(int height, int width) {
-		cell = new Cells[height][width];
+		this.cells = new Cell[height][width];
 		for (int i = 0;i < height;i++) {
 			for (int j = 0;j < width; j++) {
-				cell[i][j] = Cells.Create(i, j);
+				this.cells[i][j] = Cell.Create(i, j);
 			}
 		}
 		System.out.println("cmp gen cells");
+	}
+	
+	private void calcCells() {
+//		cells[][] 
+	}
+	
+	private void cheakMine() {
+		for(int i = 0;i < this.height;i++) {
+			System.out.println();
+			for (int j = 0; j < this.width; j++) {
+				System.out.print(cells[i][j].getStatu() + " ");
+				
+			}
+		}
 	}
 }
