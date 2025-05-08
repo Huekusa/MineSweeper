@@ -1,19 +1,21 @@
 package MineSweeper;
 
-public class Cell {
+import javax.swing.JLabel;
+
+public class Cell extends JLabel {
 	private int statu;
 	private Style style;
-	private boolean frag;
-	private int height;
-	private int width;
+	private boolean flag = false;
+	private int cell_Y;
+	private int cell_X;
 	private boolean close;
 	
-	private Cell(int height, int width) {
+	private Cell(int cell_Y, int cell_X) {
 		this.setClose(true);
-		this.setFrag(false);
 		this.setStatu(0);
-		this.setHeight(height);
-		this.setWidth(width);
+		this.setCell_Y(cell_Y);
+		this.setCell_X(cell_X);
+		this.setHorizontalAlignment(CENTER);
 	}
 	
 	public static Cell Create(int height, int width) {
@@ -26,13 +28,15 @@ public class Cell {
 
 	public Style getStyle() {return Style.getStyleOf(this);}
 
-	public boolean isFrag() {return this.frag;}
-	public void setFrag(boolean frag) {this.frag = frag;}
+	public boolean isFlag() {return this.flag;}
+	public void toggleFlag() {this.flag = !this.flag;}
 
-	public int getHeight() {return this.height;}
-	public void setHeight(int height) {this.height = height;}
-	public int getWidth() {return this.width;}
-	public void setWidth(int width) {this.width = width;}
+	public int getCell_Y() {return this.cell_Y;}
+	public void setCell_Y(int cell_Y) {this.cell_Y = cell_Y;}
+	public int getCell_X() {return this.cell_X;}
+	public void setCell_X(int cell_X) {this.cell_X = cell_X;}
+	
+	
 	public boolean isClose() {return this.close;}
 	public void setClose(boolean lock) {this.close = lock;}
 	

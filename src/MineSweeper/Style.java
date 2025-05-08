@@ -12,14 +12,21 @@ public class Style {
 	private Color foregroundColor;
 	
 	private Style(String text, Boolean close, Color color) {
-		this.text = text;
 		if (close) {
+			this.text = " ";
 			this.border = new BevelBorder(BevelBorder.RAISED);
 			this.backgroundColor = Color.GRAY;
 		}else {
+			this.text = text;
 			this.border = new BevelBorder(BevelBorder.LOWERED);
 			this.backgroundColor = Color.LIGHT_GRAY;
 		}
+		this.foregroundColor = color;
+	}
+	private Style(String text, Boolean close, Color color, boolean flag) {
+		this.text = text;
+		this.border = new BevelBorder(BevelBorder.RAISED);
+		this.backgroundColor = Color.GRAY;
 		this.foregroundColor = color;
 	}
 	
@@ -30,6 +37,9 @@ public class Style {
 
 	public static Style getStyleOf(Cell cell) {
 		boolean close = cell.isClose();
+		if (cell.isFlag()) {
+			return new Style("🏴", close, Color.RED, cell.isFlag());
+		}
 		switch(cell.getStatu()) {
 			case 0: return new Style(" ", close, Color.BLACK);
 			case 1: return new Style("1", close, Color.BLUE);

@@ -52,7 +52,13 @@ public class MineField {
 	}
 	
 	private void calcCells() {
-//		cells[][] 
+		for(int i = 0;i < height;i++) {
+			for (int j = 0;j < width;j++) {
+				if(this.cells[i][j].getStatu() == 9) {
+					this.cells[i-1][j-1].setStatu(this.cells[i-1][j-1].getStatu() + 1);
+				}
+			}
+		}
 	}
 	
 	private void cheakMine() {
@@ -63,5 +69,18 @@ public class MineField {
 				
 			}
 		}
+	}
+	
+	private Cell[][] aroundCells(Cell cell) {
+		try {
+			for(int i = -1;i < 2;i++) {
+				
+			}
+//			this.cells[cell.getCell_Y()][cell.getCell_X()]
+			
+		} catch (Exception e) {
+			;
+		}
+		return null;
 	}
 }
