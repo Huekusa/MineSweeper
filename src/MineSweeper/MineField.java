@@ -16,6 +16,7 @@ public class MineField {
 		Cell.Create(this.height, this.width);
 		genCells(this.height, this.width);
 		genMine(mines);
+		calcCells();
 		cheakMine();
 	}
 	
@@ -54,8 +55,8 @@ public class MineField {
 	private void calcCells() {
 		for(int i = 0;i < height;i++) {
 			for (int j = 0;j < width;j++) {
-				if(this.cells[i][j].getStatu() == 9) {
-					this.cells[i-1][j-1].setStatu(this.cells[i-1][j-1].getStatu() + 1);
+				if(this.cells[i][j].getStatu() == MINE) {
+					calcAroundCells(this.cells[i][j]);
 				}
 			}
 		}
@@ -71,16 +72,15 @@ public class MineField {
 		}
 	}
 	
-	private Cell[][] aroundCells(Cell cell) {
-		try {
-			for(int i = -1;i < 2;i++) {
-				
+	private void calcAroundCells(Cell cell) {
+		for(int i = -1;i < 2;i++) {
+			for(int j = -1;j < 2;j++) {
+				try {
+					if(this.cells[cell.getCell_Y()+i][cell.getCell_X()+j].getStatu() < 8) {						
+						this.cells[cell.getCell_Y()+i][cell.getCell_X()+j].setStatu(this.cells[cell.getCell_Y()+i][cell.getCell_X()+j].getStatu() + 1);				
+					}
+				} catch (Exception e) {;}
 			}
-//			this.cells[cell.getCell_Y()][cell.getCell_X()]
-			
-		} catch (Exception e) {
-			;
 		}
-		return null;
 	}
 }

@@ -38,7 +38,13 @@ public class Cell extends JLabel {
 	
 	
 	public boolean isClose() {return this.close;}
-	public void setClose(boolean lock) {this.close = lock;}
+	public void setClose(boolean lock) {
+		this.close = lock;
+		this.setText(Style.getStyleOf(this).getText());
+		this.setBorder(Style.getStyleOf(this).getBorder());
+		this.setForeground(Style.getStyleOf(this).getForegroundColor());
+		this.setBackground(Style.getStyleOf(this).getBackgroundColor());
+	}
 	
 	
 }

@@ -14,6 +14,7 @@ public class Start {
 	private JFrame frame; 
 	private JPanel field;
 	private Cell[][] cells;
+	private MineField m;
 	
 	public static void main(String[] args) {
 		new Start();
@@ -36,7 +37,7 @@ public class Start {
         field.setLayout(new GridLayout(16, 16));
         field.setSize(CELL_SIZE*16, CELL_SIZE*16);
 		
-        MineField m = MineField.Create(16, 16);
+        m = MineField.Create(16, 16);
 		
         this.cells = m.getCells();
 		for (int i = 0;i < 16;i++) {
@@ -52,6 +53,8 @@ public class Start {
 		frame.setVisible(true);
 		updateViewAll(m.getCells());
 	}
+	
+	public MineField getMinefield() {return this.m;}
 	
 	private void updateViewAll(Cell[][] c) {
 		for(int i = 0;i < 16;i++) {
@@ -87,6 +90,7 @@ public class Start {
 			if(e.getButton() == 1) {
 				if(this.cell.isClose() && !this.cell.isFlag()) {
 					this.cell.setClose(false);
+					this.openNullCells(cell);
 					updateViewOf(this.cell);
 					System.out.println(this.cell.getCell_Y() +" "+this.cell.getCell_X());					
 				}
@@ -110,6 +114,28 @@ public class Start {
 		public void mouseExited(MouseEvent e) {
 			if(cell.isClose())
 			cell.setBackground(Color.GRAY);
+		}
+		
+		public void openNullCells(Cell cell) {
+			if(cell.getStatu() == 0) {
+				for(int i = -1;i < 2;i++) {
+					for(int j = -1;j < 2;j++) {
+							if(i == 0 && j == 0) {continue;}
+							try {
+								getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].setClose(false);
+								System.out.println("open "+(cell.getCell_Y()+i)+" "+(cell.getCell_X()+j));
+							} catch (Exception e) {;}
+						}
+				}
+				for(int i = -1;i < 2;i++) {
+					for(int j = -1;j < 2;j++) {	
+						if(i == 0 && j == 0) {continue;}
+						if (getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].getStatu() == 0) {
+							openNullCells(getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j]);
+						}
+					}
+				}
+			}
 		}
 		
 		@Override
