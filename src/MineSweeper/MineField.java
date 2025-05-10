@@ -25,6 +25,8 @@ public class MineField {
 		return m;
 	}
 	
+	public int getOpenCount() {return this.openCount;}
+	
 	public Cell[][] getCells() {return this.cells;}
 
 	private void genMine(int m) {
@@ -82,5 +84,19 @@ public class MineField {
 				} catch (Exception e) {;}
 			}
 		}
+	}
+	
+	public void calcOpenCount() {
+		int count = 0;
+		for(int i = 0;i < this.height;i++) {
+			for(int j = 0;j < this.width;j++) {
+				if(!cells[i][j].isClose()) {
+					count++;
+				}
+			}
+		}
+		this.openCount = count;
+		System.out.println("count "+this.openCount);
+		
 	}
 }

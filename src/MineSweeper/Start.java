@@ -1,20 +1,25 @@
 package MineSweeper;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class Start {
+	public static final int MINE = 9;
 	private static final int CELL_SIZE = 30;
+	public static boolean gameover = false;
 	private JFrame frame; 
 	private JPanel field;
 	private Cell[][] cells;
 	private MineField m;
+	private JLabel counter;
 	
 	public static void main(String[] args) {
 		new Start();
@@ -29,13 +34,14 @@ public class Start {
 	private void initializeFrame() {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.setLayout(null);
-		frame.setSize(500, 520);
+		frame.setLayout(new BorderLayout());
+		frame.setSize(500, 550);
 		
 		field = new JPanel();
 		field.setVisible(true);
         field.setLayout(new GridLayout(16, 16));
         field.setSize(CELL_SIZE*16, CELL_SIZE*16);
+        
 		
         m = MineField.Create(16, 16);
 		
@@ -49,8 +55,15 @@ public class Start {
 			}
 		}
 		
-		frame.add(field);
+		frame.add(field, BorderLayout.CENTER);
 		frame.setVisible(true);
+		
+		counter = new JLabel();
+		counter.setVisible(true);
+		this.updateOpenCount();
+		counter.setBackground(Color.BLACK);
+		frame.add(counter, BorderLayout.SOUTH);
+		
 		updateViewAll(m.getCells());
 	}
 	
@@ -77,6 +90,15 @@ public class Start {
 		cells[c.getCell_Y()][c.getCell_X()].setForeground(s.getForegroundColor());
 		cells[c.getCell_Y()][c.getCell_X()].setBackground(s.getBackgroundColor());
 	}
+	
+	public void updateOpenCount() {
+		m.calcOpenCount();
+		counter.setText("残りマス数："+ (16 * 16 - m.getOpenCount() - 40));
+		if (16 * 16 - m.getOpenCount() - 40 == 0) {
+			this.gameover = true;
+			System.out.println("-----CLEAR-----");
+		}
+	}
 
 	public class cellListener implements MouseListener{
 		Cell cell;
@@ -87,26 +109,34 @@ public class Start {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if(e.getButton() == 1) {
-				if(this.cell.isClose() && !this.cell.isFlag()) {
-					this.cell.setClose(false);
-					this.openNullCells(cell);
-					updateViewOf(this.cell);
-					System.out.println(this.cell.getCell_Y() +" "+this.cell.getCell_X());					
-				}
-				
-			}else if(e.getButton() == 3) {
-				if (this.cell.isClose()) {					
-					this.cell.toggleFlag();
-					updateViewOf(cell);
-					System.out.println("ToggleFlag");
-				}
+			if(!gameover) {
+				if(e.getButton() == 1) {
+					if(this.cell.isClose() && !this.cell.isFlag()) {
+						this.cell.setClose(false);
+						System.out.println(this.cell.getCell_Y() +" "+this.cell.getCell_X());					
+						this.openNullCells(cell);
+						updateViewOf(this.cell);
+						if(this.cell.getStatu() == MINE) {
+							gameover = true;
+							System.out.println("GAME OVER!!");
+						}else {
+							updateOpenCount();							
+						}
+					}
+					
+				}else if(e.getButton() == 3) {
+					if (this.cell.isClose()) {					
+						this.cell.toggleFlag();
+						updateViewOf(cell);
+						System.out.println("ToggleFlag");
+					}
+				}		
 			}
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			if(this.cell.isClose() && !this.cell.isFlag())
+			if(this.cell.isClose() && !this.cell.isFlag() && !gameover)
 			cell.setBackground(new Color(220,220,220));
 		}
 
@@ -122,18 +152,15 @@ public class Start {
 					for(int j = -1;j < 2;j++) {
 							if(i == 0 && j == 0) {continue;}
 							try {
-								getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].setClose(false);
-								System.out.println("open "+(cell.getCell_Y()+i)+" "+(cell.getCell_X()+j));
-							} catch (Exception e) {;}
+								if(getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].isClose() && !m.getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].isFlag()) {
+									getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].setClose(false);
+									System.out.println("open "+(cell.getCell_Y()+i)+" "+(cell.getCell_X()+j));
+									if(getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].getStatu() == 0) {
+										openNullCells(getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j]);
+									}
+								}
+							} catch (Exception e) {;}								
 						}
-				}
-				for(int i = -1;i < 2;i++) {
-					for(int j = -1;j < 2;j++) {	
-						if(i == 0 && j == 0) {continue;}
-						if (getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j].getStatu() == 0) {
-							openNullCells(getMinefield().getCells()[cell.getCell_Y()+i][cell.getCell_X()+j]);
-						}
-					}
 				}
 			}
 		}
