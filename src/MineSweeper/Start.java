@@ -2,10 +2,15 @@ package MineSweeper;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -118,6 +123,24 @@ public class Start {
 						updateViewOf(this.cell);
 						if(this.cell.getStatu() == MINE) {
 							gameover = true;
+							JDialog dialog = new JDialog(frame, "");
+							JLabel label_dialog = new JLabel("GAME OVER!!");
+							JButton button_dialog = new JButton("終了");
+
+							dialog.setResizable(false);
+							dialog.setSize(300, 200);
+							JPanel p = new JPanel();
+							p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+							dialog.add(p);
+							
+							label_dialog.setAlignmentX(Component.CENTER_ALIGNMENT);
+							label_dialog.setFont(new Font("Arial", Font.PLAIN, 30));
+							button_dialog.setAlignmentX(Component.CENTER_ALIGNMENT);
+							button_dialog.setBackground(Color.LIGHT_GRAY);
+							p.add(label_dialog);
+							p.add(button_dialog);
+							button_dialog.addActionListener(action -> frame.dispose());
+							dialog.setVisible(true);
 							System.out.println("GAME OVER!!");
 						}else {
 							updateOpenCount();							
