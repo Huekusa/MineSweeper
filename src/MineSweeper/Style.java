@@ -1,3 +1,5 @@
+//セルの見た目
+
 package MineSweeper;
 
 import java.awt.Color;
@@ -12,6 +14,7 @@ public class Style {
 	private Color foregroundColor;
 	
 	private Style(String text, Boolean close, Color color) {
+		//フラッグがない場合のスタイル クローズ/オープン
 		if (close) {
 			this.text = " ";
 			this.border = new BevelBorder(BevelBorder.RAISED);
@@ -24,18 +27,21 @@ public class Style {
 		this.foregroundColor = color;
 	}
 	private Style(String text, Boolean close, Color color, boolean flag) {
+		//フラッグがある場合のスタイル
 		this.text = text;
 		this.border = new BevelBorder(BevelBorder.RAISED);
 		this.backgroundColor = Color.GRAY;
 		this.foregroundColor = color;
 	}
 	
+	//スタイルアップデート用のゲッター
 	public String getText() {return this.text;}
 	public Border getBorder() {return this.border;}
 	public Color getBackgroundColor() {return this.backgroundColor;}
 	public Color getForegroundColor() {return this.foregroundColor;}
 
 	public static Style getStyleOf(Cell cell) {
+		//スタイルの判定
 		boolean close = cell.isClose();
 		if (cell.isFlag()) {
 			return new Style("🏴", close, Color.RED, cell.isFlag());

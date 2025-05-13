@@ -1,16 +1,19 @@
+//各セルの設定
+//JLabelを拡張しているため、変数としてX,Y,Height,Widthが使えない
+
 package MineSweeper;
 
 import javax.swing.JLabel;
 
 public class Cell extends JLabel {
 	private int statu;
-	private Style style;
 	private boolean flag = false;
 	private int cell_Y;
 	private int cell_X;
 	private boolean close;
 	
 	private Cell(int cell_Y, int cell_X) {
+		//初期値
 		this.setClose(true);
 		this.setStatu(0);
 		this.setCell_Y(cell_Y);
@@ -25,7 +28,8 @@ public class Cell extends JLabel {
 	
 	public int getStatu() {return this.statu;}
 	public void setStatu(int statu) {this.statu = statu;}
-
+	
+	//このセルのスタイルを返す
 	public Style getStyle() {return Style.getStyleOf(this);}
 
 	public boolean isFlag() {return this.flag;}
@@ -39,13 +43,12 @@ public class Cell extends JLabel {
 	
 	public boolean isClose() {return this.close;}
 	public void setClose(boolean close) {
+		//セルの状態が変わった場合、スタイルをセットしなおす
 		this.close = close;
 		this.setText(Style.getStyleOf(this).getText());
 		this.setBorder(Style.getStyleOf(this).getBorder());
 		this.setForeground(Style.getStyleOf(this).getForegroundColor());
 		this.setBackground(Style.getStyleOf(this).getBackgroundColor());
-		
-		
 	}
 	
 	

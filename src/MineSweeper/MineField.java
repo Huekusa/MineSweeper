@@ -1,3 +1,5 @@
+//フィールドの設定、セル同士の計算
+
 package MineSweeper;
 
 public class MineField {
@@ -10,6 +12,7 @@ public class MineField {
 	private Cell[][] cells;
 	
 	private MineField(int height, int width) {
+		//フィールドの初期値設定、MINEの生成とセルの計算
 		mines = 40;
 		this.height = height;
 		this.width = width;
@@ -30,6 +33,8 @@ public class MineField {
 	public Cell[][] getCells() {return this.cells;}
 
 	private void genMine(int m) {
+		//MINEの生成
+		//乱数でセルを指定、MINEがない場合生成し、規定数になるまでループ
 		int count = 0;
 		while(count < m) {
 			var target = this.cells
@@ -45,6 +50,7 @@ public class MineField {
 	}
 	
 	private void genCells(int height, int width) {
+		//セルの生成
 		this.cells = new Cell[height][width];
 		for (int i = 0;i < height;i++) {
 			for (int j = 0;j < width; j++) {
@@ -55,6 +61,8 @@ public class MineField {
 	}
 	
 	private void calcCells() {
+		//セルスタッツの計算
+		//総当たりでMINEを検索し、周囲のセルを+1
 		for(int i = 0;i < height;i++) {
 			for (int j = 0;j < width;j++) {
 				if(this.cells[i][j].getStatu() == MINE) {
@@ -65,6 +73,7 @@ public class MineField {
 	}
 	
 	private void cheakMine() {
+		//[テスト用]セルの配置をコンソール出力
 		for(int i = 0;i < this.height;i++) {
 			System.out.println();
 			for (int j = 0; j < this.width; j++) {
@@ -75,6 +84,7 @@ public class MineField {
 	}
 	
 	private void calcAroundCells(Cell cell) {
+		//周囲のセル+1
 		for(int i = -1;i < 2;i++) {
 			for(int j = -1;j < 2;j++) {
 				try {
@@ -87,6 +97,8 @@ public class MineField {
 	}
 	
 	public void calcOpenCount() {
+		//オープンしたセルの数の計算
+		//総当たりでセルを検索し、オープンの数を数える
 		int count = 0;
 		for(int i = 0;i < this.height;i++) {
 			for(int j = 0;j < this.width;j++) {
