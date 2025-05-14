@@ -1,1 +1,2 @@
-MineSweeper作成中
+自作MineSweeper ver1.00
+クラス分けの精度がかなり低いため、設計し直して改修予定
